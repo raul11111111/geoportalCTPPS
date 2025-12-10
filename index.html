@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Geoportal CTP Piedades Sur</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  
+  <link rel="stylesheet" href="geoportal.css">
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1>🌿 Geoportal - CTP Piedades Sur</h1>
+    <div class="subtitle">Bosque, Agua y Biodiversidad</div>
+  </div>
+  <div class="header-buttons">
+    <button id="stats-button" class="header-button" onclick="abrirModalEstadisticas()">📊 Estadísticas</button>
+    <button id="report-button" class="header-button" onclick="abrirModalReporte()">📝 Crear Reporte</button>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div id="search-panel">
+  <h3>Buscar Especies</h3>
+  <input id="search-input" type="text" placeholder="Familia, grupo, nombre científico o común..." />
+  <button id="search-button" onclick="buscarEspecies()">Buscar Especies</button>
+  <div id="search-results"></div>
+</div>
+
+<div id="layers">
+  <h3>Capas del Geoportal</h3>
+  <div id="layers-list"></div>
+
+  <div id="basemap-switcher">
+    <label for="basemap-select">Mapa base</label>
+    <select id="basemap-select"></select>
+  </div>
+
+  <div id="status"></div>
+</div>
+
+<div id="report-modal">
+  <div id="report-form-container">
+    <h2>📝 Crear Nuevo Reporte</h2>
+    
+    <div class="form-group">
+      <label>Ubicación del Reporte *</label>
+      <div class="location-buttons">
+        <button type="button" class="btn-location" onclick="obtenerUbicacionGPS()">📍 Mi Ubicación</button>
+        <button type="button" class="btn-location" onclick="seleccionarEnMapa()">🗺️ Seleccionar en Mapa</button>
+      </div>
+      <div id="location-info" class="location-info" style="display: none;">
+        <strong>Ubicación capturada:</strong>
+        <div id="location-text"></div>
+      </div>
+    </div>
+    
+    <form id="report-form" onsubmit="enviarReporte(event)">
+      <div class="form-group">
+        <label for="report-nombre">Nombre *</label>
+        <input type="text" id="report-nombre" required placeholder="Tu nombre">
+      </div>
+      
+      <div class="form-group">
+        <label for="report-tipo">Tipo de Requerimiento *</label>
+        <select id="report-tipo" required>
+          <option value="">Selecciona un tipo</option>
+          <option value="Emergencia Ambiental">Emergencia Ambiental</option>
+          <option value="Avistamiento de Fauna">Avistamiento de Fauna</option>
+          <option value="Problema de Infraestructura">Problema de Infraestructura</option>
+          <option value="Reforestación">Reforestación</option>
+          <option value="Contaminación">Contaminación</option>
+          <option value="Mantenimiento">Mantenimiento</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="report-comentario">Comentario *</label>
+        <textarea id="report-comentario" required placeholder="Describe el reporte con el mayor detalle posible..."></textarea>
+      </div>
+      
+      <input type="hidden" id="report-lat">
+      <input type="hidden" id="report-lng">
+      
+      <div class="form-buttons">
+        <button type="button" class="btn-cancel" onclick="cerrarModalReporte()">Cancelar</button>
+        <button type="submit" class="btn-submit">Enviar Reporte</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL ESTADÍSTICAS -->
+<div id="stats-modal">
+  <div id="stats-container">
+    <h2>📊 Estadísticas de Especies</h2>
+    <div class="stats-summary">
+      Total de registros de especies: <span id="stats-total">Cargando...</span>
+    </div>
+    <div class="stats-hint">
+      Haz clic en un grupo para destacarlo en el mapa, o en "Mostrar todos" para verlos normales.
+    </div>
+
+    <div class="stats-chip-container" id="stats-chips">
+      <!-- Chips con grupos -->
+    </div>
+
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Grupo</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody id="stats-grupos-body">
+        <tr><td colspan="2">Cargando...</td></tr>
+      </tbody>
+    </table>
+
+    <div class="form-buttons" style="margin-top:20px;">
+      <button type="button" class="btn-cancel" onclick="cerrarModalEstadisticas()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="geoportal.js"></script>
+
+</body>
+</html>
+
